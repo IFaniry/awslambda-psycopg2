@@ -20,7 +20,7 @@ RUN sed -i -e 's#^pg_config=$#pg_config=/opt/pgsql/bin/pg_config#' \
     && python setup.py install
 
 RUN rm /opt/postgresql-11.6.tar.gz \
-    && rm -rf ../postgresql-11.6
+    && rm -rf ../postgresql-11.6 \
     && rm /opt/psycopg2-2_8_4.tar.gz \
     && rm -rf ../psycopg2-2_8_4
 
