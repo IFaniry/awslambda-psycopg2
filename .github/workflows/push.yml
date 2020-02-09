@@ -1,4 +1,4 @@
-name: Deploy to Pivotal Cloud Foundry
+name: Generate psycopg2 library for use in AWS Lambda
 
 on:
   push:
