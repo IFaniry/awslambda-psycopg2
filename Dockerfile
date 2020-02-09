@@ -1,11 +1,10 @@
-# FROM lambci/lambda:build-python3.7
-FROM python:3.7-alpine
+FROM lambci/lambda:build-python3.7
 
 WORKDIR /opt
-RUN curl -S -o postgresql-11.6.tar.gz https://ftp.postgresql.org/pub/source/v11.6/postgresql-11.6.tar.gz \
-    && curl -S -o psycopg2-2_8_4.tar.gz https://github.com/psycopg/psycopg2/archive/2_8_4.tar.gz \
-    && tar -xvzf /opt/postgresql-11.6.tar.gz \
-    && tar -xvzf /opt/psycopg2-2_8_4.tar.gz
+RUN curl -S -o postgresql-11.6.tar.gz -L https://ftp.postgresql.org/pub/source/v11.6/postgresql-11.6.tar.gz \
+    && curl -S -o psycopg2-2_8_4.tar.gz -L https://github.com/psycopg/psycopg2/archive/2_8_4.tar.gz \
+    && tar -xzvf postgresql-11.6.tar.gz \
+    && tar -xzvf psycopg2-2_8_4.tar.gz
 
 WORKDIR /opt/postgresql-11.6
 RUN ./configure --prefix=/opt/pgsql --with-python --with-openssl \
