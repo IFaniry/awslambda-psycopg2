@@ -16,7 +16,7 @@ RUN sed -i -e 's#^pg_config=$#pg_config=/opt/pgsql/bin/pg_config#' \
               -e 's#^static_libpq=0$#static_libpq=1#' \
               -e 's#^libraries=$#libraries=ssl crypto#' setup.cfg \
     && python setup.py build \
-    && python setup.py install
+    && python setup.py install \
     && rm -rf ../psycopg2-2_8_4
 
 WORKDIR /var/task
