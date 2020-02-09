@@ -1,0 +1,59 @@
+name: Deploy to Pivotal Cloud Foundry
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  IMAGE_NAME: awslambda-psycopg2
+  IMAGE_TAG: 2.8.4
+
+jobs:
+  # Run tests.
+  # See also https  ://docs.docker.com/docker-hub/builds/automated-testing/
+  docker-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile
+          fi
+  # Generates psycopg2 library for use in AWS Lambda.
+  # Reference : https://github.com/jkehler/awslambda-psycopg2
+  generate-awslambda-psycopg2:
+    # Ensure test job passes before pushing image.
+    needs: docker-test
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME:$IMAGE_TAG
+      - name: Get the generated psycopg2 library from container to host
+        run: |
+          docker create -it --name dummy $IMAGE_NAME:$IMAGE_TAG bash
+          docker cp dummy:/var/lang/lib/python3.7/site-packages/psycopg2-2.8.4-py3.7-linux-x86_64.egg/psycopg2 .
+          docker rm -f dummy
+      - name: Generate the psycopg2 library artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: psycopg2-v${{ env.IMAGE_TAG }}
+          path: psycopg2
