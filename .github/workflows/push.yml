@@ -47,11 +47,15 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME:$IMAGE_TAG
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
       - name: Get the generated psycopg2 library from container to host
         run: |
           docker create -it --name dummy $IMAGE_NAME:$IMAGE_TAG bash
           # docker cp dummy:/var/lang/lib/python3.7/site-packages/psycopg2-2.8.4-py3.7-linux-x86_64.egg/psycopg2 .
-          docker cp dummy:/opt/python .
+          python -m pip install Django==3.0.2 django-storages==1.8 psycopg2-binary==2.8.4 werkzeug==0.16.0 --upgrade -t python
           docker rm -f dummy
       # - name: Generate the psycopg2 library artifact
       #   uses: actions/upload-artifact@v1
