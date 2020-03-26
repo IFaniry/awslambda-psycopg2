@@ -27,4 +27,4 @@ FROM lambci/lambda:build-python3.7
 #     && rm -rf psycopg2-2_8_4
 
 # WORKDIR /var/task
-python -m pip install Django==3.0.2 django-storages==1.8 psycopg2-binary==2.8.4 werkzeug==0.16.0 --upgrade -t /opt/python
+RUN python -m pip install Django==3.0.2 django-storages==1.8 psycopg2-binary==2.8.4 werkzeug==0.16.0 --upgrade -t /opt/python
