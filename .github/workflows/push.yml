@@ -50,10 +50,16 @@ jobs:
       - name: Get the generated psycopg2 library from container to host
         run: |
           docker create -it --name dummy $IMAGE_NAME:$IMAGE_TAG bash
-          docker cp dummy:/var/lang/lib/python3.7/site-packages/psycopg2-2.8.4-py3.7-linux-x86_64.egg/psycopg2 .
+          # docker cp dummy:/var/lang/lib/python3.7/site-packages/psycopg2-2.8.4-py3.7-linux-x86_64.egg/psycopg2 .
+          docker cp dummy:/opt/python .
           docker rm -f dummy
+      # - name: Generate the psycopg2 library artifact
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: psycopg2-v${{ env.IMAGE_TAG }}
+      #     path: psycopg2
       - name: Generate the psycopg2 library artifact
         uses: actions/upload-artifact@v1
         with:
-          name: psycopg2-v${{ env.IMAGE_TAG }}
-          path: psycopg2
+          name: layer
+          path: python
