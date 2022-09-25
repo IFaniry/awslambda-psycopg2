@@ -1,5 +1,7 @@
 FROM lambci/lambda:build-python3.7
 
+# comment
+
 # WORKDIR /opt
 # RUN curl -S -o postgresql-11.6.tar.gz -L https://ftp.postgresql.org/pub/source/v11.6/postgresql-11.6.tar.gz \
 #     && curl -S -o psycopg2-2_8_4.tar.gz -L https://github.com/psycopg/psycopg2/archive/2_8_4.tar.gz \
